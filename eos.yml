@@ -1,0 +1,12 @@
+---
+
+- hosts: "mainnet"
+  become: yes
+  roles:
+    - requirements
+    - deploy
+
+  gather_facts: no
+  pre_tasks:
+    - name: "install python2"
+      raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)

@@ -1,0 +1,6 @@
+---
+
+- hosts: "mainnet"
+  become: yes
+  roles:
+    - network

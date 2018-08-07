@@ -1,0 +1,77 @@
+agent-name = {{ agent_name }}
+
+http-server-address = 0.0.0.0:{{ http_port }}
+p2p-listen-endpoint = 0.0.0.0:{{ p2p_port }}
+
+p2p-max-nodes-per-host = 1
+http-validate-host = false
+https-client-validate-peers = 1
+abi-serializer-max-time-ms = 3000
+chain-state-db-size-mb = 8192
+reversible-blocks-db-size-mb = 340
+contracts-console = false
+allowed-connection = any
+max-clients = 100
+network-version-match = 1
+sync-fetch-span = 500
+filter-on = *
+connection-cleanup-period = 30
+max-implicit-request = 1500
+access-control-allow-origin = *
+access-control-allow-headers = *
+access-control-allow-credentials = false
+verbose-http-errors = true
+
+plugin = eosio::chain_plugin
+plugin = eosio::chain_api_plugin
+plugin = eosio::history_plugin
+plugin = eosio::history_api_plugin
+
+{% for address in p2p_peer_addresses %}
+p2p-peer-address = {{ address }}
+{% endfor %}
+
+# History of EOS token transfers
+filter-on = eosio.token:transfer:
+
+# Creation of tokens
+filter-on = eosio.token:issue:
+filter-on = eosio.token:create:
+
+# History of multisig transactions
+filter-on = eosio.msig:propose:
+filter-on = eosio.msig:approve:
+filter-on = eosio.msig:unapprove:
+filter-on = eosio.msig:cancel:
+filter-on = eosio.msig:exec:
+
+# System Contract Operations
+filter-on = eosio:newaccount:
+filter-on = eosio:setcode:
+filter-on = eosio:setabi:
+filter-on = eosio:updateauth:
+filter-on = eosio:deleteauth:
+filter-on = eosio:linkauth:
+filter-on = eosio:unlinkauth:
+filter-on = eosio:canceldelay:
+filter-on = eosio:onerror:
+filter-on = eosio:buyrambytes:
+filter-on = eosio:buyram:
+filter-on = eosio:sellram:
+filter-on = eosio:delegatebw:
+filter-on = eosio:undelegatebw:
+filter-on = eosio:refund:
+filter-on = eosio:regproducer:
+filter-on = eosio:setram:
+filter-on = eosio:bidname:
+filter-on = eosio:unregprod:
+filter-on = eosio:regproxy:
+filter-on = eosio:voteproducer:
+filter-on = eosio:claimrewards:
+filter-on = eosio:setpriv:
+filter-on = eosio:rmvproducer:
+filter-on = eosio:setalimits:
+filter-on = eosio:setglimits:
+filter-on = eosio:setprods:
+filter-on = eosio:reqauth:
+filter-on = eosio:setparams:

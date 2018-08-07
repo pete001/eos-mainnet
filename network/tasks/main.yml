@@ -21,7 +21,6 @@
      - cleos
      - start
      - stop
-     - launch
 
  - name: Changing perms of helpers
    file: dest=/opt/mainnet/{{ item }} mode=a+x
@@ -29,7 +28,6 @@
      - cleos.sh
      - start.sh
      - stop.sh
-     - launch.sh
 
  - name: copy wallet helper bash files
    template: src=scripts/wallet/{{ item }}.j2 dest=/opt/mainnet/wallet/{{ item }}.sh

@@ -2,7 +2,7 @@
 
 This simple Ansible repo will deploy an RPC API node hooked into the EOS mainnet.
 
-It is intended to be used as the companion repo for the [EOS Node Tools]() microsite.
+It is intended to be used as the companion repo for the [EOS Node Tools](https://eosnode.tools/) microsite.
 
 ## Installing Ansible
 

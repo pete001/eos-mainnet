@@ -3,6 +3,8 @@ agent-name = {{ agent_name }}
 http-server-address = 0.0.0.0:{{ http_port }}
 p2p-listen-endpoint = 0.0.0.0:{{ p2p_port }}
 
+blocks-dir = "/opt/mainnet/blocks"
+
 p2p-max-nodes-per-host = 1
 http-validate-host = false
 https-client-validate-peers = 1
@@ -14,7 +16,6 @@ allowed-connection = any
 max-clients = 100
 network-version-match = 1
 sync-fetch-span = 500
-filter-on = *
 connection-cleanup-period = 30
 max-implicit-request = 1500
 access-control-allow-origin = *

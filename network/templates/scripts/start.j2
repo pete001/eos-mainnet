@@ -8,4 +8,4 @@
 NODEOS=/opt/eos/build/programs/nodeos/nodeos
 DATADIR=/opt/mainnet
 $DATADIR/stop.sh
-$NODEOS --data-dir $DATADIR --config-dir $DATADIR -l $DATADIR/logging.json "$@" >> $DATADIR/stdout.txt 2>> $DATADIR/stderr.txt & echo $! > $DATADIR/nodeos.pid
+$NODEOS --data-dir $DATADIR --config-dir $DATADIR -l $DATADIR/logging.json "$@" >> $DATADIR/log.txt 2>&1 & echo $! > $DATADIR/nodeos.pid

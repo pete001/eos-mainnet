@@ -2,7 +2,7 @@
 
 ansible_user: root
 repo: https://github.com/EOS-Mainnet/eos
-version: mainnet-1.1.3
+version: mainnet-1.1.4
 agent_name: add_your_node_name
 
 # Use these settings for non standard ssh port and/or ssh key

@@ -1,6 +1,6 @@
 ---
 
-ansible_user: root
+ansible_user: eos
 repo: https://github.com/EOS-Mainnet/eos
 version: mainnet-1.1.4
 agent_name: add_your_node_name

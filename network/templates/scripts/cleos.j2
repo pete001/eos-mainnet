@@ -5,5 +5,8 @@
 #
 ################################################################################
 
+# Path to the cleos binary
 CLEOS=/opt/eos/build/programs/cleos/cleos
-$CLEOS -u http://127.0.0.1:8888 --wallet-url http://127.0.0.1:55554 "$@"
+
+# Simple convenience wrapper, no wallet interaction by default
+$CLEOS -u http://127.0.0.1:8888 "$@"

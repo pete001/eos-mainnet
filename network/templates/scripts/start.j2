@@ -5,7 +5,14 @@
 #
 ################################################################################
 
+# Path to nodeos binary
 NODEOS=/opt/eos/build/programs/nodeos/nodeos
+
+# Mainnet directory for data dirs, config and logging definition
 DATADIR=/opt/mainnet
+
+# Attempt to stop any previous running nodeos
 $DATADIR/stop.sh
+
+# Start up nodeos, log everything to a file and store the pid
 $NODEOS --data-dir $DATADIR --config-dir $DATADIR -l $DATADIR/logging.json "$@" >> $DATADIR/log.txt 2>&1 & echo $! > $DATADIR/nodeos.pid

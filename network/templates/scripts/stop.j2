@@ -1,25 +1,24 @@
 #!/bin/bash
 ################################################################################
 #
-# Clean stop of nodeos
+# Clean stop of nodeos (unchanged since the Jungle testnet days!)
 #
 ################################################################################
 
 DIR=/opt/mainnet
 
-    if [ -f $DIR"/nodeos.pid" ]; then
-        pid=$(cat $DIR"/nodeos.pid")
-        echo $pid
-        kill $pid
-        rm -r $DIR"/nodeos.pid"
+if [ -f $DIR"/nodeos.pid" ]; then
+    pid=$(cat $DIR"/nodeos.pid")
+    echo $pid
+    kill $pid
+    rm -r $DIR"/nodeos.pid"
 
-        echo -ne "Stoping Nodeos"
+    echo -ne "Stoping Nodeos"
 
-        while true; do
-            [ ! -d "/proc/$pid/fd" ] && break
-            echo -ne "."
-            sleep 1
-        done
-        echo -ne "\rNodeos stopped. \n"
-
-    fi
+    while true; do
+        [ ! -d "/proc/$pid/fd" ] && break
+        echo -ne "."
+        sleep 1
+    done
+    echo -ne "\rNodeos stopped. \n"
+fi

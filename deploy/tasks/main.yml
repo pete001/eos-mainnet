@@ -47,3 +47,11 @@
    apt: name=ntp state=installed
    tags:
      - time
+
+ - name: Add user
+   user:
+     name: "{{ ops_user }}"
+     shell: /bin/bash
+     groups: sudo
+     state: present
+     home: "/home/{{ ops_user }}"

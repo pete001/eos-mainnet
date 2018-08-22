@@ -14,6 +14,12 @@ Check the [official docs](http://docs.ansible.com/ansible/latest/installation_gu
 
 - Update the environment vars in `group_vars/mainnet.yml` for your own settings
 
+### SSH
+
+When you first attempt to run an ansible playbook, it needs to be able to SSH to the target machine in the same way that you would manually SSH via the command line.
+
+Set up key based authentication for SSH, and update the `ansible_user` variable in `group_vars/mainnet.yml` with that user.
+
 ## Running
 
 ### Installing EOS

@@ -1,9 +1,17 @@
 ---
 
-ansible_user: eos
+# This is the ssh user you use from the control machine to the target machine
+ansible_user: root
+
+# We are using the community repo
 repo: https://github.com/EOS-Mainnet/eos
-version: mainnet-1.1.4
-agent_name: add_your_node_name
+version: mainnet-1.1.6
+
+# A simple reference, it doesnt have to be a producer name
+agent_name: add_your_name
+
+# The user to create which will run nodeos
+ops_user: eos
 
 # Use these settings for non standard ssh port and/or ssh key
 # ansible_ssh_private_key_file: ~/.ssh/key.pem

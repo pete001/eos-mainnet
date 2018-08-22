@@ -11,6 +11,11 @@ if [ -f $DIR"/nodeos.pid" ]; then
     pid=$(cat $DIR"/nodeos.pid")
     echo $pid
     kill $pid
+
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+
     rm -r $DIR"/nodeos.pid"
 
     echo -ne "Stoping Nodeos"

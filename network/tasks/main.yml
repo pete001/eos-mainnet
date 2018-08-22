@@ -55,3 +55,9 @@
    template: src=mainnet/genesis.j2 dest=/opt/mainnet/genesis.json
    tags:
      - config
+
+ - name: set permissions
+   file: dest=/opt/mainnet owner={{ ops_user }} group={{ ops_user }} recurse=yes
+   tags:
+     - user
+     - config

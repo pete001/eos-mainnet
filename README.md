@@ -27,7 +27,7 @@ Set up key based authentication for SSH, and update the `ansible_user` variable 
 To install EOS run:
 
 ```
-ansible-playbook mainnet.yml
+ansible-playbook eos.yml
 ```
 
 ### Cofiguring EOS

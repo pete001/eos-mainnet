@@ -6,7 +6,7 @@
  - name: clone repo eos
    git:
      repo: "{{ repo }}"
-     recursive: yes
+     recursive: no
      dest: /opt/eos
      update: yes
      version: "{{ version }}"

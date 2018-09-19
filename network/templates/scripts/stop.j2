@@ -18,7 +18,7 @@ if [ -f $DIR"/nodeos.pid" ]; then
 
     rm -r $DIR"/nodeos.pid"
 
-    echo -ne "Stoping Nodeos"
+    echo -ne "Stopping Nodeos"
 
     while true; do
         [ ! -d "/proc/$pid/fd" ] && break

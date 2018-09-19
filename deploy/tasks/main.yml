@@ -1,57 +1,59 @@
 ---
 
- - name: /etc/eos
-   file: path=/etc/eos state=directory
+- import_tasks: requirements.yml
 
- - name: clone repo eos
-   git:
-     repo: "{{ repo }}"
-     recursive: no
-     dest: /opt/eos
-     update: yes
-     version: "{{ version }}"
-     track_submodules: yes
-     force: yes
+- name: /etc/eos
+  file: path=/etc/eos state=directory
 
- - name: submodules
-   shell: cd /opt/eos && git submodule update --init --recursive
+- name: clone repo eos
+  git:
+    repo: "{{ repo }}"
+    recursive: no
+    dest: /opt/eos
+    update: yes
+    version: "{{ version }}"
+    track_submodules: yes
+    force: yes
 
- - name: exec eosio_build.sh
-   expect:
-     chdir: /opt/eos
-     command: /bin/bash /opt/eos/eosio_build.sh -s EOS
-     responses:
-       \?: 1
-     timeout: 7200
-   async: 7200
-   poll: 10
+- name: submodules
+  shell: cd /opt/eos && git submodule update --init --recursive
 
- - name: check binary installation
-   stat: path=/usr/local/bin/nodeos
-   register: nodeos
+- name: exec eosio_build.sh
+  expect:
+    chdir: /opt/eos
+    command: /bin/bash /opt/eos/eosio_build.sh -s EOS
+    responses:
+      \?: 1
+    timeout: 7200
+  async: 7200
+  poll: 10
 
- - name: link binaries
-   shell: "ln -s /opt/eos/build/programs/{{ item }}/{{ item }} /usr/local/bin/{{ item }}"
-   with_items:
-     - nodeos
-     - cleos
-     - keosd
-   when: nodeos.stat.exists == False
+- name: check binary installation
+  stat: path=/usr/local/bin/nodeos
+  register: nodeos
 
- - name: disable timedatectl
-   shell: timedatectl set-ntp no
-   tags:
-     - time
+- name: link binaries
+  shell: "ln -s /opt/eos/build/programs/{{ item }}/{{ item }} /usr/local/bin/{{ item }}"
+  with_items:
+    - nodeos
+    - cleos
+    - keosd
+  when: nodeos.stat.exists == False
 
- - name: make sure ntp is installed
-   apt: name=ntp state=installed
-   tags:
-     - time
+- name: disable timedatectl
+  shell: timedatectl set-ntp no
+  tags:
+    - time
 
- - name: Add user
-   user:
-     name: "{{ ops_user }}"
-     shell: /bin/bash
-     groups: sudo
-     state: present
-     home: "/home/{{ ops_user }}"
+- name: make sure ntp is installed
+  apt: name=ntp state=installed
+  tags:
+    - time
+
+- name: Add user
+  user:
+    name: "{{ ops_user }}"
+    shell: /bin/bash
+    groups: sudo
+    state: present
+    home: "/home/{{ ops_user }}"

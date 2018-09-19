@@ -3,7 +3,6 @@
 - hosts: "mainnet"
   become: yes
   roles:
-    - requirements
     - deploy
 
   gather_facts: no

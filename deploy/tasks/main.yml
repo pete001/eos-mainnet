@@ -14,12 +14,12 @@
      force: yes
 
  - name: submodules
-   shell: cd /opt/eos && git submodule update --init --recursive && ex -sc '16i|set( CORE_SYMBOL_NAME "EOS" )' -cx CMakeLists.txt
+   shell: cd /opt/eos && git submodule update --init --recursive
 
  - name: exec eosio_build.sh
    expect:
      chdir: /opt/eos
-     command: /bin/bash /opt/eos/eosio_build.sh
+     command: /bin/bash /opt/eos/eosio_build.sh -s EOS
      responses:
        \?: 1
      timeout: 7200

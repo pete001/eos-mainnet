@@ -1,0 +1,14 @@
+---
+
+- name: installing dependencies
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - git
+    - build-essential
+    - python-simplejson
+    - python-pexpect
+    - jq

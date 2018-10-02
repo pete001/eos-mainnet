@@ -1,0 +1,91 @@
+---
+
+- fail: msg="{{ item }} must be defined for this playbook"
+  when: item not in vars
+  with_items:
+    - type
+
+- name: check cleos
+  stat: 
+    path: /opt/eos/build/programs/cleos/cleos
+  register: cleos
+
+- fail: 
+    msg: "This host is missing the EOS binaries"
+  when: cleos.stat.exists == False
+
+- name: create network directories
+  file: 
+    path: /opt/mainnet/wallet
+    state: directory
+
+- name: copy helper bash files
+  template: 
+    src: scripts/{{ item }}.j2 
+    dest: /opt/mainnet/{{ item }}.sh
+  with_items:
+    - cleos
+    - start
+    - stop
+
+- name: Changing perms of helpers
+  file: 
+    dest: /opt/mainnet/{{ item }} 
+    mode: a+x
+  with_items:
+    - cleos.sh
+    - start.sh
+    - stop.sh
+
+- name: copy wallet helper bash files
+  template: 
+    src: scripts/wallet/{{ item }}.j2 
+    dest: /opt/mainnet/wallet/{{ item }}.sh
+  with_items:
+    - start
+    - stop
+
+- name: Changing perms of wallet bash helpers
+  file: 
+    dest: /opt/mainnet/wallet/{{ item }} 
+    mode: a+x
+  with_items:
+    - start.sh
+    - stop.sh
+
+- name: Copy the replay script
+  copy:
+    src: files/replay.sh
+    dest: /opt/mainnet/replay.sh
+    mode: a+x
+
+- name: copy logging definition
+  template: 
+    src: scripts/logging.j2 
+    dest: /opt/mainnet/logging.json
+  tags:
+    - config
+
+- name: copy config.ini
+  template: 
+    src: mainnet/{{ type }}.j2 
+    dest: /opt/mainnet/config.ini
+  tags:
+    - config
+
+- name: copy genesis
+  template: 
+    src: mainnet/genesis.j2 
+    dest: /opt/mainnet/genesis.json
+  tags:
+    - config
+
+- name: set permissions
+  file: 
+    dest: /opt/mainnet 
+    owner: "{{ ops_user }}" 
+    group: "{{ ops_user }}"
+    recurse: yes
+  tags:
+    - user
+    - config

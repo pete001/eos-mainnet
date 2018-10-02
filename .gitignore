@@ -1,2 +1,2 @@
-eos.retry
-mainnet.retry
+*.retry
+.DS_STORE

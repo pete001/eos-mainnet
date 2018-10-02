@@ -1,0 +1,23 @@
+---
+
+- name: Restart nodeos
+  command: /opt/mainnet/start.sh
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "restart nodeos"
+  register: response
+  failed_when: ( response.rc not in [ 0, 1 ] )
+
+- name: Stop nodeos
+  command: /opt/mainnet/stop.sh
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "stop nodeos"
+  register: response
+  failed_when: ( response.rc not in [ 0, 1 ] )
+
+- name: Replay nodeos
+  command: /opt/mainnet/start.sh --hard-replay --wasm-runtime wabt
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "replay nodeos"

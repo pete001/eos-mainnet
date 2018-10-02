@@ -1,0 +1,7 @@
+---
+
+- fail: 
+    msg: "The \"job\" variable must be defined at runtime for this playbook"
+  when: job is not defined
+
+- include_tasks: "{{ job }}.yml"

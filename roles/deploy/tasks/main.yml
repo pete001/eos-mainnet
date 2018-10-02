@@ -3,7 +3,20 @@
 - import_tasks: requirements.yml
 
 - name: /etc/eos
-  file: path=/etc/eos state=directory
+  file: 
+    path: /etc/eos
+    state: directory
+
+- name: check binary installation
+  stat: 
+    path: "{{ nodeos_path }}"
+  register: nodeos
+
+- name: fetch version of nodeos
+  command: "{{ nodeos_path }} --version"
+  register: nodeos_version
+  failed_when: nodeos_version.rc != 255
+  when: nodeos.stat.exists == True
 
 - name: clone repo eos
   git:
@@ -14,9 +27,11 @@
     version: "{{ version }}"
     track_submodules: yes
     force: yes
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
 
 - name: submodules
   shell: cd /opt/eos && git submodule update --init --recursive
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
 
 - name: exec eosio_build.sh
   expect:
@@ -27,10 +42,7 @@
     timeout: 7200
   async: 7200
   poll: 10
-
-- name: check binary installation
-  stat: path=/usr/local/bin/nodeos
-  register: nodeos
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
 
 - name: link binaries
   shell: "ln -s /opt/eos/build/programs/{{ item }}/{{ item }} /usr/local/bin/{{ item }}"

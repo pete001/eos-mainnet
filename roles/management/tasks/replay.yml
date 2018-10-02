@@ -1,0 +1,12 @@
+---
+
+- name: Stop the nodeos process
+  command: echo "stopping nodeos"
+  notify: "stop nodeos"
+  tags: stop
+
+- name: Download latest backup and replay
+  command: /opt/mainnet/replay.sh
+  become: yes
+  become_user: "{{ ops_user }}"
+  notify: "replay nodeos"

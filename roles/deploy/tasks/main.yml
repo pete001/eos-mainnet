@@ -1,0 +1,74 @@
+---
+
+- import_tasks: requirements.yml
+
+- name: /etc/eos
+  file: 
+    path: /etc/eos
+    state: directory
+
+- name: Check binary installation
+  stat: 
+    path: "{{ nodeos_path }}"
+  register: nodeos
+
+- name: Fetch version of nodeos
+  command: "{{ nodeos_path }} --version"
+  register: nodeos_version
+  failed_when: nodeos_version.rc != 255
+  when: nodeos.stat.exists == True
+
+- name: Clone the mainnet eos repo
+  git:
+    repo: "{{ repo }}"
+    recursive: no
+    dest: "{{ eos_install_dir }}"
+    update: yes
+    version: "{{ version }}"
+    track_submodules: yes
+    force: yes
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
+
+- name: Fetch submodules
+  shell: "cd {{ eos_install_dir }} && git submodule update --init --recursive"
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
+
+- name: Build EOS via eosio_build.sh
+  expect:
+    chdir: "{{ eos_install_dir }}"
+    command: "/bin/bash {{ eos_install_dir }}/eosio_build.sh -s EOS"
+    responses:
+      \?: 1
+    timeout: 7200
+  async: 7200
+  poll: 10
+  when: nodeos_version.stdout is not defined or version not in nodeos_version.stdout
+
+- name: Link EOS binaries
+  file:
+    src: "{{ eos_install_dir }}/build/programs/{{ item }}/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    state: link
+  with_items:
+    - nodeos
+    - cleos
+    - keosd
+  when: nodeos.stat.exists == False
+
+- name: Disable timedatectl
+  shell: timedatectl set-ntp no
+  tags:
+    - time
+
+- name: Make sure ntp is installed
+  apt: name=ntp state=installed
+  tags:
+    - time
+
+- name: Add specific ops user
+  user:
+    name: "{{ ops_user }}"
+    shell: /bin/bash
+    groups: sudo
+    state: present
+    home: "/home/{{ ops_user }}"

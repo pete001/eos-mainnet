@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd {{ mainnet_install_dir }}
+wget $(wget --quiet "https://eosnode.tools/api/blocks?limit=1" -O- | jq -r '.data[0].s3') -O blocks_backup.tar.gz
+/bin/bash stop.sh
+rm -rf blocks state
+tar xvzf blocks_backup.tar.gz

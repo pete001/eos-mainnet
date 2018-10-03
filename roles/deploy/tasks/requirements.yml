@@ -1,6 +1,6 @@
 ---
 
-- name: installing dependencies
+- name: Installing dependencies
   become: yes
   apt:
     name: "{{ item }}"

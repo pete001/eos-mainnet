@@ -1,0 +1,72 @@
+---
+
+- fail: 
+    msg: "{{ item }} must be defined for this playbook"
+  when: item not in vars
+  with_items:
+    - type
+
+- name: Check cleos is installed
+  stat: 
+    path: "{{ eos_install_dir }}/build/programs/cleos/cleos"
+  register: cleos
+
+- fail: 
+    msg: "This host is missing the EOS binaries"
+  when: cleos.stat.exists == False
+
+- name: Create mainnet directories
+  file: 
+    path: "{{ mainnet_install_dir }}/wallet"
+    state: directory
+
+- name: Copy helper bash files
+  template: 
+    src: scripts/{{ item }}.j2 
+    dest: "{{ mainnet_install_dir }}/{{ item }}.sh"
+    mode: a+x
+  with_items:
+    - cleos
+    - start
+    - stop
+    - replay
+
+- name: Copy wallet helper bash files
+  template: 
+    src: scripts/wallet/{{ item }}.j2
+    dest: "{{ mainnet_install_dir }}/wallet/{{ item }}.sh"
+    mode: a+x
+  with_items:
+    - start
+    - stop
+
+- name: Copy logging definition
+  template: 
+    src: scripts/logging.j2 
+    dest: "{{ mainnet_install_dir }}/logging.json"
+  tags:
+    - config
+
+- name: Copy nodeos config.ini
+  template: 
+    src: mainnet/{{ type }}.j2 
+    dest: "{{ mainnet_install_dir }}/config.ini"
+  tags:
+    - config
+
+- name: Copy genesis
+  template: 
+    src: mainnet/genesis.j2 
+    dest: "{{ mainnet_install_dir }}/genesis.json"
+  tags:
+    - config
+
+- name: Set permissions
+  file: 
+    dest: "{{ mainnet_install_dir }}"
+    owner: "{{ ops_user }}" 
+    group: "{{ ops_user }}"
+    recurse: yes
+  tags:
+    - user
+    - config

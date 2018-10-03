@@ -6,7 +6,7 @@
 ################################################################################
 
 # Path to the cleos binary
-CLEOS=/opt/eos/build/programs/cleos/cleos
+CLEOS={{ eos_install_dir }}/build/programs/cleos/cleos
 
 # Simple convenience wrapper, no wallet interaction by default
 $CLEOS -u http://127.0.0.1:8888 "$@"

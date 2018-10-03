@@ -1,0 +1,5 @@
+---
+
+- name: Restart the nodeos process
+  command: echo "Restarting nodeos"
+  notify: "restart nodeos"

@@ -5,7 +5,7 @@
 #
 ################################################################################
 
-DIR=/opt/mainnet
+DIR={{ mainnet_install_dir }}
 
 if [ -f $DIR"/nodeos.pid" ]; then
     pid=$(cat $DIR"/nodeos.pid")

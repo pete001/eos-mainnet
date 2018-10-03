@@ -1,0 +1,5 @@
+---
+
+- name: Stop the nodeos process
+  command: echo "Stopping nodeos"
+  notify: "stop nodeos"

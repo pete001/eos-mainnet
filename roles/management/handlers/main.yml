@@ -1,0 +1,23 @@
+---
+
+- name: Restart nodeos
+  command: "{{ mainnet_install_dir }}/start.sh"
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "restart nodeos"
+  register: response
+  failed_when: ( response.rc not in [ 0, 1 ] )
+
+- name: Stop nodeos
+  command: "{{ mainnet_install_dir }}/stop.sh"
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "stop nodeos"
+  register: response
+  failed_when: ( response.rc not in [ 0, 1 ] )
+
+- name: Replay nodeos
+  command: "{{ mainnet_install_dir }}/replay.sh"
+  become: yes
+  become_user: "{{ ops_user }}"
+  listen: "replay nodeos"

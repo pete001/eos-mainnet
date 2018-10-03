@@ -6,10 +6,10 @@
 ################################################################################
 
 # Path to nodeos binary
-NODEOS=/opt/eos/build/programs/nodeos/nodeos
+NODEOS={{ eos_install_dir }}/build/programs/nodeos/nodeos
 
 # Mainnet directory for data dirs, config and logging definition
-DATADIR=/opt/mainnet
+DATADIR={{ mainnet_install_dir }}
 
 # Attempt to stop any previous running nodeos
 $DATADIR/stop.sh

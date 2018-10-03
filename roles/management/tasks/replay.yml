@@ -1,0 +1,14 @@
+---
+
+- name: Download and uncompress latest blocks backup
+  command: "{{ mainnet_install_dir }}/replay.sh"
+  become: yes
+  become_user: "{{ ops_user }}"
+
+- name: Start the hard replay nodeos process
+  shell: "{{ mainnet_install_dir }}/start.sh --hard-replay --wasm-runtime wabt"
+  args:
+    chdir: "{{ mainnet_install_dir }}"
+    executable: "/bin/bash"
+  become: yes
+  become_user: "{{ ops_user }}"

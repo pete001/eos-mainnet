@@ -1,0 +1,6 @@
+---
+
+- hosts: "mainnet"
+  roles:
+    - management
+  

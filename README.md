@@ -20,13 +20,32 @@ Please make sure you have the most recent version of Ansible installed as this r
 
 - To upgrade EOS, update the `version` var in `group_vars/mainnet.yml`
 
-### SSH
+## SSH
 
 When you first attempt to run an ansible playbook, it needs to be able to SSH to the target machine in the same way that you would manually SSH via the command line.
 
 Set up key based authentication for SSH, and update the `ansible_user` variable in `group_vars/mainnet.yml` with that user.
 
+## One liner
+
+You can run a single command to:
+
+- Clone latest EOS repo
+- Install mainnet configuration
+- Download latest mainnet blocks backup from eosnode.tools
+- Kick of a resync with the network
+
+Just update the `inventory` with your node's IP, ensure you can access via ssh using key based auth, and run: 
+
+```
+ansible-playbook install.yml
+```
+
+Note: this will take some time! Once complete, you can follow progress on the node by tailing the `log.txt` in the `/opt/mainnet` directory (default location).
+
 ## Running
+
+If you don't want to use the one liner, there are 3 playbooks that manage each stage. 
 
 ### Installing EOS
 
@@ -36,7 +55,7 @@ To install or upgrade EOS run:
 ansible-playbook eos.yml
 ```
 
-### Cofiguring EOS
+### Configuring EOS
 
 To setup EOS for first time, run:
 
@@ -52,9 +71,7 @@ You can roll new changes to the `config.ini` with:
 ansible-playbook mainnet.yml --tags=config
 ```
 
-## Management
-
-There are a few simple helpers to start/stop/restart the `nodeos` process:
+There are a few simple helpers to restart/stop the `nodeos` process:
 
 ### (Re)start
 

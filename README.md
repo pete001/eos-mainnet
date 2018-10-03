@@ -70,7 +70,7 @@ ansible-playbook management.yml -e "job=stop"
 
 ### Replay
 
-Warning! This will auto remove your `blocks` and `state` directories.
+Warning! This will auto remove your `blocks` and `state` directories. It will take a long time to download and uncompress the blocks backup, consider using `-v` verbose modes to follow progress.
 
 ```
 ansible-playbook management.yml -e "job=replay"

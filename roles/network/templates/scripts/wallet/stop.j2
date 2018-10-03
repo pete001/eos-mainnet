@@ -5,7 +5,7 @@
 #
 ################################################################################
 
-DIR=/opt/mainnet/wallet
+DIR={{ mainnet_install_dir }}/wallet
 
     if [ -f $DIR"/wallet.pid" ]; then
         pid=$(cat $DIR"/wallet.pid")

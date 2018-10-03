@@ -3,7 +3,7 @@ agent-name = {{ agent_name }}
 http-server-address = 0.0.0.0:{{ http_port }}
 p2p-listen-endpoint = 0.0.0.0:{{ p2p_port }}
 
-blocks-dir = "/opt/mainnet/blocks"
+blocks-dir = "{{ mainnet_install_dir }}/blocks"
 
 wasm-runtime = wabt
 p2p-max-nodes-per-host = 1

@@ -5,7 +5,7 @@
 #
 ################################################################################
 KEOSD=/opt/eos/build/programs/keosd/keosd
-DATADIR=/opt/mainnet/wallet
+DATADIR={{ mainnet_install_dir }}/wallet
 $DATADIR/stop.sh
 $KEOSD --data-dir $DATADIR --http-server-address 127.0.0.1:55554 "$@" >> $DATADIR/stdout.txt 2>> $DATADIR/stderr.txt & echo $! > $DATADIR/wallet.pid
 echo "Wallet started"

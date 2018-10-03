@@ -1,88 +1,69 @@
 ---
 
-- fail: msg="{{ item }} must be defined for this playbook"
+- fail: 
+    msg: "{{ item }} must be defined for this playbook"
   when: item not in vars
   with_items:
     - type
 
-- name: check cleos
+- name: Check cleos is installed
   stat: 
-    path: /opt/eos/build/programs/cleos/cleos
+    path: "{{ eos_install_dir }}/build/programs/cleos/cleos"
   register: cleos
 
 - fail: 
     msg: "This host is missing the EOS binaries"
   when: cleos.stat.exists == False
 
-- name: create network directories
+- name: Create mainnet directories
   file: 
-    path: /opt/mainnet/wallet
+    path: "{{ mainnet_install_dir }}/wallet"
     state: directory
 
-- name: copy helper bash files
+- name: Copy helper bash files
   template: 
     src: scripts/{{ item }}.j2 
-    dest: /opt/mainnet/{{ item }}.sh
+    dest: "{{ mainnet_install_dir }}/{{ item }}.sh"
+    mode: a+x
   with_items:
     - cleos
     - start
     - stop
+    - replay
 
-- name: Changing perms of helpers
-  file: 
-    dest: /opt/mainnet/{{ item }} 
-    mode: a+x
-  with_items:
-    - cleos.sh
-    - start.sh
-    - stop.sh
-
-- name: copy wallet helper bash files
+- name: Copy wallet helper bash files
   template: 
-    src: scripts/wallet/{{ item }}.j2 
-    dest: /opt/mainnet/wallet/{{ item }}.sh
+    src: scripts/wallet/{{ item }}.j2
+    dest: "{{ mainnet_install_dir }}/wallet/{{ item }}.sh"
+    mode: a+x
   with_items:
     - start
     - stop
 
-- name: Changing perms of wallet bash helpers
-  file: 
-    dest: /opt/mainnet/wallet/{{ item }} 
-    mode: a+x
-  with_items:
-    - start.sh
-    - stop.sh
-
-- name: Copy the replay script
-  copy:
-    src: files/replay.sh
-    dest: /opt/mainnet/replay.sh
-    mode: a+x
-
-- name: copy logging definition
+- name: Copy logging definition
   template: 
     src: scripts/logging.j2 
-    dest: /opt/mainnet/logging.json
+    dest: "{{ mainnet_install_dir }}/logging.json"
   tags:
     - config
 
-- name: copy config.ini
+- name: Copy nodeos config.ini
   template: 
     src: mainnet/{{ type }}.j2 
-    dest: /opt/mainnet/config.ini
+    dest: "{{ mainnet_install_dir }}/config.ini"
   tags:
     - config
 
-- name: copy genesis
+- name: Copy genesis
   template: 
     src: mainnet/genesis.j2 
-    dest: /opt/mainnet/genesis.json
+    dest: "{{ mainnet_install_dir }}/genesis.json"
   tags:
     - config
 
-- name: set permissions
+- name: Set permissions
   file: 
-    dest: /opt/mainnet 
+    dest: "{{ mainnet_install_dir }}"
     owner: "{{ ops_user }}" 
     group: "{{ ops_user }}"
     recurse: yes

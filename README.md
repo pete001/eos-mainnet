@@ -52,8 +52,6 @@ You can roll new changes to the `config.ini` with:
 ansible-playbook mainnet.yml --tags=config
 ```
 
-## Management
-
 There are a few simple helpers to start/stop/restart the `nodeos` process:
 
 ### (Re)start

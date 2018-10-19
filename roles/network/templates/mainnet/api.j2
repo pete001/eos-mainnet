@@ -6,12 +6,13 @@ p2p-listen-endpoint = 0.0.0.0:{{ p2p_port }}
 blocks-dir = "{{ mainnet_install_dir }}/blocks"
 
 wasm-runtime = wabt
+validation-mode = light
 p2p-max-nodes-per-host = 1
 http-validate-host = false
 https-client-validate-peers = 1
 abi-serializer-max-time-ms = 3000
 chain-state-db-size-mb = 32000
-reversible-blocks-db-size-mb = 340
+reversible-blocks-db-size-mb = 2048
 contracts-console = false
 allowed-connection = any
 max-clients = 100
@@ -23,6 +24,7 @@ access-control-allow-origin = *
 access-control-allow-headers = *
 access-control-allow-credentials = false
 verbose-http-errors = true
+max-transaction-time = 1000
 
 plugin = eosio::chain_plugin
 plugin = eosio::chain_api_plugin

@@ -1,81 +1,125 @@
-agent-name = {{ agent_name }}
+# The name supplied to identify this node amongst the peers. (eosio::net_plugin)
+agent-name = "{{ agent_name }}"
 
+# The local IP and port to listen for incoming http connections; set blank to disable. (eosio::http_plugin)
 http-server-address = 0.0.0.0:{{ http_port }}
+
+# The actual host:port used to listen for incoming p2p connections. (eosio::net_plugin)
 p2p-listen-endpoint = 0.0.0.0:{{ p2p_port }}
 
+# the location of the blocks directory (absolute path or relative to application data dir) (eosio::chain_plugin)
 blocks-dir = "{{ mainnet_install_dir }}/blocks"
 
-wasm-runtime = wabt
-validation-mode = light
-p2p-max-nodes-per-host = 1
-http-validate-host = false
-https-client-validate-peers = 1
-abi-serializer-max-time-ms = 3000
-chain-state-db-size-mb = 32000
-reversible-blocks-db-size-mb = 2048
-contracts-console = false
-allowed-connection = any
-max-clients = 100
-network-version-match = 0
-sync-fetch-span = 500
-connection-cleanup-period = 30
-max-implicit-request = 1500
-access-control-allow-origin = *
-access-control-allow-headers = *
-access-control-allow-credentials = false
-verbose-http-errors = true
-max-transaction-time = 1000
-
-plugin = eosio::chain_plugin
-plugin = eosio::chain_api_plugin
-plugin = eosio::history_plugin
-plugin = eosio::history_api_plugin
-
+# The public endpoint of a peer node to connect to. Use multiple p2p-peer-address options as needed to compose a network. (eosio::net_plugin)
 {% for address in p2p_peer_addresses %}
 p2p-peer-address = {{ address }}
 {% endfor %}
 
-# History of EOS token transfers
-filter-on = eosio.token:transfer:
+# Plugin(s) to enable, may be specified multiple times
+plugin = eosio::chain_plugin
+plugin = eosio::chain_api_plugin
 
-# Creation of tokens
-filter-on = eosio.token:issue:
-filter-on = eosio.token:create:
+# Override default WASM runtime (eosio::chain_plugin)
+wasm-runtime = wabt
 
-# History of multisig transactions
-filter-on = eosio.msig:propose:
-filter-on = eosio.msig:approve:
-filter-on = eosio.msig:unapprove:
-filter-on = eosio.msig:cancel:
-filter-on = eosio.msig:exec:
+# Chain validation mode ("full" or "light"). (eosio::chain_plugin)
+validation-mode = light
 
-# System Contract Operations
-filter-on = eosio:newaccount:
-filter-on = eosio:setcode:
-filter-on = eosio:setabi:
-filter-on = eosio:updateauth:
-filter-on = eosio:deleteauth:
-filter-on = eosio:linkauth:
-filter-on = eosio:unlinkauth:
-filter-on = eosio:canceldelay:
-filter-on = eosio:onerror:
-filter-on = eosio:buyrambytes:
-filter-on = eosio:buyram:
-filter-on = eosio:sellram:
-filter-on = eosio:delegatebw:
-filter-on = eosio:undelegatebw:
-filter-on = eosio:refund:
-filter-on = eosio:regproducer:
-filter-on = eosio:setram:
-filter-on = eosio:bidname:
-filter-on = eosio:unregprod:
-filter-on = eosio:regproxy:
-filter-on = eosio:voteproducer:
-filter-on = eosio:claimrewards:
-filter-on = eosio:setpriv:
-filter-on = eosio:rmvproducer:
-filter-on = eosio:setalimits:
-filter-on = eosio:setglimits:
-filter-on = eosio:setprods:
-filter-on = eosio:reqauth:
-filter-on = eosio:setparams:
+# Maximum size (in MiB) of the chain state database (eosio::chain_plugin)
+chain-state-db-size-mb = 32000
+
+# Safely shut down node when free space remaining in the chain state database drops below this size (in MiB). (eosio::chain_plugin)
+chain-state-db-guard-size-mb = 128
+
+# Maximum size (in MiB) of the reversible blocks database (eosio::chain_plugin)
+reversible-blocks-db-size-mb = 2048
+
+# Safely shut down node when free space remaining in the reverseible blocks database drops below this size (in MiB). (eosio::chain_plugin)
+reversible-blocks-db-guard-size-mb = 2
+
+# Override default maximum ABI serialization time allowed in ms (eosio::chain_plugin)
+abi-serializer-max-time-ms = 15000
+
+# print contract's output to console (eosio::chain_plugin)
+contracts-console = false
+
+# Database read mode ("speculative", "head", or "read-only"). (eosio::chain_plugin)
+read-mode = speculative
+
+# Disable the check which subjectively fails a transaction if a contract bills more RAM to another account within the context of a notification handler (i.e. when the receiver is not the code of the action). (eosio::chain_plugin)
+disable-ram-billing-notify-checks = false
+
+# Track actions which match receiver:action:actor. Actor may be blank to include all. Action and Actor both blank allows all from Recieiver. Receiver may not be blank. (eosio::history_plugin)
+# filter-on =
+
+# Do not track actions which match receiver:action:actor. Action and Actor both blank excludes all from Reciever. Actor blank excludes all from reciever:action. Receiver may not be blank. (eosio::history_plugin)
+# filter-out =
+
+# true: validate that the peer certificates are valid and trusted, false: ignore cert errors (eosio::http_client_plugin)
+https-client-validate-peers = 1
+
+# The local IP and port to listen for incoming https connections; leave blank to disable. (eosio::http_plugin)
+# https-server-address =
+
+# Filename with the certificate chain to present on https connections. PEM format. Required for https. (eosio::http_plugin)
+# https-certificate-chain-file =
+
+# Filename with https private key in PEM format. Required for https (eosio::http_plugin)
+# https-private-key-file =
+
+# Specify the Access-Control-Allow-Origin to be returned on each request. (eosio::http_plugin)
+access-control-allow-origin = *
+
+# Specify the Access-Control-Allow-Headers to be returned on each request. (eosio::http_plugin)
+access-control-allow-headers = *
+
+# Specify the Access-Control-Max-Age to be returned on each request. (eosio::http_plugin)
+# access-control-max-age =
+
+# Specify if Access-Control-Allow-Credentials: true should be returned on each request. (eosio::http_plugin)
+access-control-allow-credentials = true
+
+# The maximum body size in bytes allowed for incoming RPC requests (eosio::http_plugin)
+max-body-size = 1048576
+
+# Append the error log to HTTP responses (eosio::http_plugin)
+verbose-http-errors = true
+
+# If set to false, then any incoming "Host" header is considered valid (eosio::http_plugin)
+http-validate-host = false
+
+# The maximum number of pending login requests (eosio::login_plugin)
+max-login-requests = 1000000
+
+# The maximum timeout for pending login requests (in seconds) (eosio::login_plugin)
+max-login-timeout = 60
+
+# An externally accessible host:port for identifying this node. Defaults to p2p-listen-endpoint. (eosio::net_plugin)
+# p2p-server-address =
+
+# Maximum number of client nodes from any single IP address (eosio::net_plugin)
+p2p-max-nodes-per-host = 1
+
+# Can be 'any' or 'producers' or 'specified' or 'none'. If 'specified', peer-key must be specified at least once. If only 'producers', peer-key is not required. 'producers' and 'specified' may be combined. (eosio::net_plugin)
+allowed-connection = any
+
+# Maximum number of clients from which connections are accepted, use 0 for no limit (eosio::net_plugin)
+max-clients = 50
+
+# number of seconds to wait before cleaning up dead connections (eosio::net_plugin)
+connection-cleanup-period = 30
+
+# max connection cleanup time per cleanup call in millisec (eosio::net_plugin)
+max-cleanup-time-msec = 10
+
+# True to require exact match of peer network version. (eosio::net_plugin)
+network-version-match = 0
+
+# number of blocks to retrieve in a chunk from any individual peer during synchronization (eosio::net_plugin)
+sync-fetch-span = 500
+
+# maximum sizes of transaction or block messages that are sent without first sending a notice (eosio::net_plugin)
+max-implicit-request = 1500
+
+# Enable expirimental socket read watermark optimization (eosio::net_plugin)
+use-socket-read-watermark = 0

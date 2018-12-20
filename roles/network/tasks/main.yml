@@ -6,14 +6,15 @@
   with_items:
     - type
 
-- name: Check cleos is installed
-  stat: 
-    path: "{{ eos_install_dir }}/build/programs/cleos/cleos"
-  register: cleos
-
-- fail: 
-    msg: "This host is missing the EOS binaries"
-  when: cleos.stat.exists == False
+- name: Check nodeos is installed
+  command: which nodeos
+  changed_when: false
+  failed_when: false
+  register: nodeos_installed
+  
+- fail:
+    msg: "his host is missing the EOS binaries"
+  when: nodeos_installed|failed
 
 - name: Create mainnet directories
   file: 

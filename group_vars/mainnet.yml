@@ -3,9 +3,8 @@
 # This is the ssh user you use from the control machine to the target machine
 ansible_user: root
 
-# We are using the community repo
-repo: https://github.com/EOSIO/eos
-version: v1.4.4
+# The deb to install
+eos_deb: https://github.com/EOSIO/eos/releases/download/v1.5.2/eosio_1.5.2-1-ubuntu-18.04_amd64.deb
 
 # A simple reference, it doesnt have to be a producer name
 agent_name: add_your_name
@@ -14,7 +13,6 @@ agent_name: add_your_name
 ops_user: eos
 
 # Override the default install locations
-eos_install_dir: /opt/eos
 mainnet_install_dir: /opt/mainnet
 
 # Use these settings for non standard ssh port and/or ssh key

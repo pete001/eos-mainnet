@@ -15,7 +15,7 @@ p2p_peer_addresses:
   - "p2p.eos.bitspace.no:9876"
   - "p2p.eos.blckchnd.com:19876"
   - "node1.blockgenesys.com:9876"
-  - "eosapi.blockmatrix.network:13546"
+  - "eospeering.blockmatrix.network:13546"
   - "anvil.eosblocksmith.io:9876"
   - "p2p1.bp2.io:4444"
   - "node1.bp.eosindex.io:9876"

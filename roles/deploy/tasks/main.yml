@@ -2,6 +2,9 @@
 
 - import_tasks: requirements.yml
 
+- import_tasks: crash_reporters.yml
+  tags: crash
+  
 - name: Install eos
   apt:
     deb: "{{ eos_deb }}"

@@ -18,6 +18,7 @@ p2p-peer-address = {{ address }}
 # Plugin(s) to enable, may be specified multiple times
 plugin = eosio::chain_plugin
 plugin = eosio::chain_api_plugin
+plugin = eosio::producer_api_plugin
 
 # Override default WASM runtime (eosio::chain_plugin)
 wasm-runtime = wabt
@@ -117,9 +118,6 @@ network-version-match = 0
 
 # number of blocks to retrieve in a chunk from any individual peer during synchronization (eosio::net_plugin)
 sync-fetch-span = 500
-
-# maximum sizes of transaction or block messages that are sent without first sending a notice (eosio::net_plugin)
-max-implicit-request = 1500
 
 # Enable expirimental socket read watermark optimization (eosio::net_plugin)
 use-socket-read-watermark = 0

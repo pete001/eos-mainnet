@@ -1,0 +1,31 @@
+---
+
+- name: Check if Whoopsie daemon is installed
+  command: dpkg -s whoopsie
+  register: whoopsie_installed
+  failed_when: whoopsie_installed.rc > 1
+  changed_when: False
+  check_mode: False
+
+- block:
+    - name: Deactivate Whoopsie daemon sending crash reports
+      lineinfile: dest=/etc/default/whoopsie regexp="^report_crashes" line="report_crashes=false" state=present
+
+    - name: Ensure Whoopsie daemon is stopped and disabled
+      service: name=whoopsie state=stopped enabled=false
+  when: whoopsie_installed.rc == 0
+
+- name: Check if apport daemon is installed
+  command: dpkg -s apport
+  register: apport_installed
+  failed_when: apport_installed.rc > 1
+  changed_when: False
+  check_mode: False
+
+- block:
+    - name: Deactivate apport daemon crash report collection
+      lineinfile: dest=/etc/default/apport regexp="^enabled" line="enabled=0" state=present
+
+    - name: Ensure apport daemon is stopped and disabled
+      service: name=apport state=stopped enabled=false
+  when: apport_installed.rc == 0

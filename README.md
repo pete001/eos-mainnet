@@ -20,6 +20,8 @@ Please make sure you have the most recent version of Ansible installed as this r
 
 - To upgrade EOS, update the `version` var in `group_vars/mainnet.yml`
 
+- Ensure that NTP is installed (for those using AWS EC2 this is a link to set time https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html)
+
 ## SSH
 
 When you first attempt to run an ansible playbook, it needs to be able to SSH to the target machine in the same way that you would manually SSH via the command line.
